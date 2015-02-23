@@ -1,4 +1,4 @@
-FROM sumpfgottheit:centos7
+FROM sumpfgottheit/centos7
 MAINTAINER Florian Sachs "florian.sachs@gmx.at"
 
 # Install Supervisor and Java
