@@ -1,20 +1,20 @@
 ELK Stack
 ========
 
-This Image provides an **ELK Stack** based on
+This Image provides an **ELK Stack**, based on versions of 2015-03-22, which are:
 
 - CentOS 7
 - OpenJDK 7
 - Logstash 1.4.2
-- Elasticsearch 1.4.3
-- Kibana 4.0.0-rc1
+- Elasticsearch 1.4.4
+- Kibana 4.0.1
 
 Usage
 =====
 
 This image uses **supervisor** to start the three components (Logstash, Elasticsearch, Kibana). The configurationfiles for supervisor are take from the **supervisor/** directory within the github repository, which are copied into the directory **/etc/supervisord.d/** on the image. Supervisord itself is configured, to **log** into the file **/var/log/supervisord.log**. This file is also preconfigured to be read by **logstash** and put into **elasticsearch**. 
 
-When the container ist started, connect to the port **5601** and **kibana** will welcome you. Acknowledge the predefined index (logstash-something) and you will see the **supervisord** logentries.
+When the container ist started, connect to the port **5601** and **kibana** will welcome you. Acknowledge the predefined index (logstash-\*) and you will see the **supervisord** logentries.
 
 Every component is configured to log itself into the **/var/log/** directory.
 

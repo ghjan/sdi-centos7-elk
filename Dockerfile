@@ -9,28 +9,37 @@ RUN yum -y install supervisor java-1.7.0-openjdk-headless
 # 
 
 # Install Logstash (from https://registry.hub.docker.com/u/pblittle/docker-logstash/dockerfile/)
+ENV LS=logstash-1.4.2
 RUN cd /tmp && \
-	wget https://download.elasticsearch.org/logstash/logstash/logstash-1.4.2.tar.gz && \
-	tar xzvf logstash-1.4.2.tar.gz && \
-	mv logstash-1.4.2 /opt/logstash && \
+	wget https://download.elasticsearch.org/logstash/logstash/${LS}.tar.gz && \
+	echo "d59ef579c7614c5df9bd69cfdce20ed371f728ff  ${LS}.tar.gz" > sha1sum.txt && \
+	sha1sum -c sha1sum.txt &&  rm sha1sum.txt && \
+	tar xzvf ${LS}.tar.gz && \
+	mv ${LS} /opt/logstash && \
 	chown -R root:root /opt/logstash && \
-	rm logstash-1.4.2.tar.gz
+	rm ${LS}.tar.gz
 
 
-# Install Elasticsearch from RPM Package
+# Install Elasticsearch 
+ENV ES=elasticsearch-1.4.4
 RUN cd /tmp && \
-	wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.3.tar.gz && \
-	tar xvfz elasticsearch-1.4.3.tar.gz && \
-	mv elasticsearch-1.4.3 /opt/elasticsearch && \
-	rm elasticsearch-1.4.3.tar.gz
+	wget https://download.elasticsearch.org/elasticsearch/elasticsearch/${ES}.tar.gz && \
+	echo "963415a9114ecf0b7dd1ae43a316e339534b8f31  ${ES}.tar.gz" > sha1sum.txt && \
+	sha1sum -c sha1sum.txt &&  rm sha1sum.txt && \
+	tar xvfz ${ES}.tar.gz && \
+	mv ${ES} /opt/elasticsearch && \
+	rm ${ES}.tar.gz
 
 # Install Kibana
+ENV KIBANA=kibana-4.0.1-linux-x64
 RUN cd /tmp && \
-	wget https://download.elasticsearch.org/kibana/kibana/kibana-4.0.0-rc1-linux-x64.tar.gz && \
-	tar xvfz kibana-4.0.0-rc1-linux-x64.tar.gz && \
-	mv kibana-4.0.0-rc1-linux-x64 /opt/kibana && \
+	wget https://download.elasticsearch.org/kibana/kibana/${KIBANA}.tar.gz && \
+	echo "1b8914c62a606b7103295a4e3ab01ec40c9993ed  ${KIBANA}.tar.gz" > sha1sum.txt && \
+	sha1sum -c sha1sum.txt &&  rm sha1sum.txt && \
+	tar xvfz ${KIBANA}.tar.gz && \
+	mv ${KIBANA} /opt/kibana && \
 	chown -R root:root /opt/kibana && \
-	rm -f kibana-4.0.0-rc1-linux-x64.tar.gz
+	rm -f ${KIBANA}.tar.gz
 
 #
 # Building the Configuration for Elasticsearch, Logstash an Kibana 
