@@ -37,6 +37,12 @@ do
 done
 
 
+if [[ ! -f /etc/logstash.d/_minimal.conf ]] && [[ -f /opt/logstash/_minimal.conf ]] ; then
+	cp /opt/logstash/_minimal.conf /etc/logstash.d/_minimal.conf
+fi
+
+
+
 
 LS_HEAP_SIZE="${LS_HEAP_SIZE:=500m}"
 

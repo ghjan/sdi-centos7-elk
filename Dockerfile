@@ -18,6 +18,8 @@ RUN cd /tmp && \
 	mv ${LS} /opt/logstash && \
 	chown -R root:root /opt/logstash && \
 	rm ${LS}.tar.gz
+# Copy minimal.conf to bin dir, so it can be taken if nothing is in the conf-dir
+ADD logstash_minimal.conf /opt/logstash/_minimal.conf
 # Copy adapted Startscript into Container. 
 COPY logstash.startscript /opt/logstash/bin/logstash
 RUN chmod 0755 /opt/logstash/bin/logstash
