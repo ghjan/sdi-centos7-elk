@@ -18,7 +18,9 @@ RUN cd /tmp && \
 	mv ${LS} /opt/logstash && \
 	chown -R root:root /opt/logstash && \
 	rm ${LS}.tar.gz
-
+# Copy adapted Startscript into Container. 
+COPY logstash.startscript /opt/logstash/bin/logstash
+RUN chmod 0755 /opt/logstash/bin/logstash
 
 # Install Elasticsearch 
 ENV ES=elasticsearch-1.4.4
@@ -64,6 +66,6 @@ EXPOSE 5601
 # Clean everything that yum left behind
 RUN yum -y clean all
 
-VOLUME ["/var/log", "/etc/logstash.d", "/var/elasticsearch"]
+VOLUME ["/var/log", "/var/elasticsearch"]
 
 CMD [ "/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf" ]
