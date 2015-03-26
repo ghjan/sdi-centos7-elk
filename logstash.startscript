@@ -28,12 +28,12 @@
 
 [[ -d /etc/logstash.d ]] || mkdir /etc/logstash.d
 
-for dir in /logs
+for dir in /logs/*
 do
 	[[ -d $dir ]] || continue
 	[[ -f $dir/logstash.conf ]] || continue
 	container=$(basename $dir)
-	sed -r 's#/logs#$dir#' ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
+	sed -r "s#/logs#$dir#" ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
 done
 
 
