@@ -1,4 +1,5 @@
 FROM sumpfgottheit/centos7
+#FROM sumpfgottheitlocal/centos7
 MAINTAINER Florian Sachs "florian.sachs@gmx.at"
 
 # Install Supervisor and Java
@@ -51,7 +52,7 @@ RUN cd /tmp && \
 
 # Logstash
 ENV LOGSTASH_CONF_DIR=/etc/logstash.d/
-RUN mkdir -p $LOGSTASH_CONF_DIR
+RUN mkdir -p /etc/logstash.d/patterns
 ADD logstash_minimal.conf $LOGSTASH_CONF_DIR/_minimal.conf
 
 # Elasticsearch

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+TAG=sumpfgottheitlocal/common-diwa-elk
+
+docker build -t $TAG .
+
+echo 
+echo "Image built: $TAG"
+echo

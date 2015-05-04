@@ -27,13 +27,15 @@
 #########################################################################
 
 [[ -d /etc/logstash.d ]] || mkdir /etc/logstash.d
+[[ -d /etc/logstash.d/patterns ]] || mkdir /etc/logstash.d/patterns
 
 for dir in /logs/*
 do
 	[[ -d $dir ]] || continue
 	[[ -f $dir/logstash.conf ]] || continue
 	container=$(basename $dir)
-	sed -r "s#/logs#$dir#" ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
+	sed -r "/path/ s#/logs#$dir#" ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
+	[[ -f ${dir}/logstash.pattern ]] && cp ${dir}/logstash.pattern /etc/logstash.d/patterns/${container}.pattern
 done
 
 
