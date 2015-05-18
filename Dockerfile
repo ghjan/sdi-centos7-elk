@@ -61,7 +61,6 @@ RUN mkdir -p $ELASTICSEARCH_DATA_DIR
 
 # Copy the supervisord to the container
 COPY supervisor/*.ini /etc/supervisord.d/
-RUN sed -r -i 's#logfile=/var/log/supervisor/supervisord.log#logfile=/var/log/supervisord.log#' /etc/supervisord.conf
 
 # Expose the Kibana Port
 EXPOSE 5601 
