@@ -4,77 +4,49 @@
 # This is most useful when done from a git checkout.
 #
 # Usage:
-#     bin/logstash <command> [arguments]
+#   bin/logstash <command> [arguments]
 #
 # See 'bin/logstash help' for a list of commands.
 #
-# NOTE: One extra command is available 'deps'
-# The 'deps' command will install dependencies for logstash.
+# Supported environment variables:
+#   LS_HEAP_SIZE="xxx" size for the -Xmx${LS_HEAP_SIZE} maximum Java heap size option, default is "500m"
+#   LS_JAVA_OPTS="xxx" to append extra options to the defaults JAVA_OPTS provided by logstash
+#   JAVA_OPTS="xxx" to *completely override* the defauls set of JAVA_OPTS provided by logstash
 #
-# If you do not have ruby installed, you can set "USE_JRUBY=1"
-# in your environment and this script will download and use
-# a release of JRuby for you.
+# Development environment variables:
+#   USE_RUBY=1 to force use the local "ruby" command to launch logstash instead of using the vendored JRuby
+#   USE_DRIP=1 to force use drip
+#   DEBUG=1 to output debugging information
 
-# Defaults you can override with environment variables
+unset CDPATH
+. "$(cd `dirname $0`/..; pwd)/bin/logstash.lib.sh"
+setup
 
-
-#########################################################################
-# The ELK Container for diwa gets all logvolumes of the other containers
-# mountet into /logs/<containername>. In each directory, a File named
-# 'logstash.conf' should describe an File Input Plugin for the logs of
-# the container. These configs are copied to /etc/logstash.d with the 
-# pathes changed accordingly
-#########################################################################
-
+### SDI Config
 [[ -d /etc/logstash.d ]] || mkdir /etc/logstash.d
 [[ -d /etc/logstash.d/patterns ]] || mkdir /etc/logstash.d/patterns
 
 for dir in /logs/*
 do
-	[[ -d $dir ]] || continue
-	[[ -f $dir/logstash.conf ]] || continue
-	container=$(basename $dir)
-	sed -r "/path/ s#/logs#$dir#" ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
-	[[ -f ${dir}/logstash.pattern ]] && cp ${dir}/logstash.pattern /etc/logstash.d/patterns/${container}.pattern
+    [[ -d $dir ]] || continue
+    [[ -f $dir/logstash.conf ]] || continue
+    container=$(basename $dir)
+    sed -r "/path/ s#/logs#$dir#" ${dir}/logstash.conf > /etc/logstash.d/${container}.conf
+    [[ -f ${dir}/logstash.pattern ]] && cp ${dir}/logstash.pattern /etc/logstash.d/patterns/${container}.pattern
 done
 
 
 if [[ ! -f /etc/logstash.d/_minimal.conf ]] && [[ -f /opt/logstash/_minimal.conf ]] ; then
-	cp /opt/logstash/_minimal.conf /etc/logstash.d/_minimal.conf
+    cp /opt/logstash/_minimal.conf /etc/logstash.d/_minimal.conf
 fi
+### /SDI Config
 
-
-
-
-LS_HEAP_SIZE="${LS_HEAP_SIZE:=500m}"
-
-unset CDPATH
-basedir=$(cd `dirname $0`/..; pwd)
-. "${basedir}/bin/logstash.lib.sh"
-
-
-setup
-
-# Export these so that they can be picked up by file input (and others?).
-export HOME SINCEDB_DIR
 
 case $1 in
-  deps) install_deps ;;
-  env) env "$@" ;;
   -*)
-    if [ -z "$VENDORED_JRUBY" ] ; then
-      exec "${RUBYCMD}" "-I${RUBYLIB}" "${basedir}/lib/logstash/runner.rb" "agent" "$@"
-    else
-      exec "${JAVACMD}" $JAVA_OPTS "-jar" "$JRUBY_JAR" "-I${RUBYLIB}" "${basedir}/lib/logstash/runner.rb" "agent" "$@"
-    fi
+    ruby_exec "${LOGSTASH_HOME}/lib/bootstrap/environment.rb" "logstash/runner.rb" "agent" "$@"
     ;;
   *)
-    if [ -z "$VENDORED_JRUBY" ] ; then
-      exec "${RUBYCMD}" "-I${RUBYLIB}" "${basedir}/lib/logstash/runner.rb" "$@"
-    else
-      exec "${JAVACMD}" $JAVA_OPTS "-jar" "$JRUBY_JAR" "-I${RUBYLIB}" "${basedir}/lib/logstash/runner.rb" "$@"
-    fi
+    ruby_exec "${LOGSTASH_HOME}/lib/bootstrap/environment.rb" "logstash/runner.rb" "$@"
     ;;
 esac
-
-

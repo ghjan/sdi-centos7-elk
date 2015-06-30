@@ -1,6 +1,7 @@
 #!/bin/sh
 
-TAG=sumpfgottheitlocal/common-diwa-elk
+T=$(basename $(dirname $(readlink -f $0)))
+TAG="sumpfgottheitlocal/$T"
 
 docker build -t $TAG .
 

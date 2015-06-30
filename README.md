@@ -4,10 +4,10 @@ ELK Stack
 This Image provides an **ELK Stack**, based on versions of 2015-03-22, which are:
 
 - CentOS 7
-- OpenJDK 7
-- Logstash 1.4.2
-- Elasticsearch 1.4.4
-- Kibana 4.0.1
+- OpenJDK 8
+- Logstash 1.5.1
+- Elasticsearch 1.6.0
+- Kibana 4.1.0
 
 Usage
 =====
@@ -29,7 +29,3 @@ There are three volumes, that you should be aware of:
 
 Containers from this image are meant to be a central logging solution for your service. By using **/etc/logstash.d** as a volume, you can centralize the logstash-configurations for every service.
 
-DIWA
-=====
-
-This image ist called **diwa-common-elk** as it is part of my **diwa** (Deployment of Impressive Webapplications) framework, which is part of my masterthesis.
