@@ -1,7 +1,9 @@
 ELK Stack
 ========
 
-This Image provides an **ELK Stack**, based on versions of 2015-03-22, which are:
+(Documentation how to integrate the SDI (Sumpfgottheit's Docker Images)[https://github.com/sumpfgottheit/sdi-centos7/wiki]
+
+This Image provides an **ELK Stack**, based on versions of 2015-06-29, which are:
 
 - CentOS 7
 - OpenJDK 8

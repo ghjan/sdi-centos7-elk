@@ -70,3 +70,4 @@ RUN yum -y clean all
 VOLUME ["/var/log", "/var/elasticsearch"]
 
 CMD [ "/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf" ]
+
